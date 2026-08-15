@@ -363,12 +363,7 @@
     // ==============================
 
     function calculateBMI(weight, height) {
-
-        // Height is entered in centimetres,
-        // so convert it to metres.
-
         const heightM = height / 100;
-
         return weight / (heightM ** 2);
     }
 
@@ -378,20 +373,13 @@
     // ==============================
 
     function bmiCategory(bmi) {
-
         if (bmi < 18.5) {
             return "Underweight";
-        }
-
-        else if (bmi < 25) {
+        } else if (bmi < 25) {
             return "Normal weight";
-        }
-
-        else if (bmi < 30) {
+        } else if (bmi < 30) {
             return "Overweight";
-        }
-
-        else {
+        } else {
             return "Obese";
         }
     }
@@ -401,26 +389,25 @@
     // Activity Level
     // ==============================
 
-    function calculateActivityLevel() {
+    function getActivityMultiplier() {
 
         const activity =
-            parseInt(document.getElementById("activity").value);
+            document.getElementById("activity").value;
 
         switch (activity) {
-
-            case 1:
+            case "1":
                 return 1.2;
 
-            case 2:
+            case "2":
                 return 1.375;
 
-            case 3:
+            case "3":
                 return 1.55;
 
-            case 4:
+            case "4":
                 return 1.725;
 
-            case 5:
+            case "5":
                 return 1.9;
 
             default:
@@ -440,15 +427,12 @@
         // Mifflin-St Jeor equation
 
         if (sex.toLowerCase() === "m") {
-
             bmr =
                 (10 * weight) +
                 (6.25 * height) -
                 (5 * age) +
                 5;
-
         } else {
-
             bmr =
                 (10 * weight) +
                 (6.25 * height) -
@@ -457,7 +441,7 @@
         }
 
         const activityMultiplier =
-            calculateActivityLevel();
+            getActivityMultiplier();
 
         if (activityMultiplier === null) {
             return null;
@@ -468,33 +452,55 @@
 
 
     // ==============================
-    // Get User Information
+    // Get Information
     // ==============================
 
     function getInformation() {
 
-        const weight =
-            parseFloat(document.getElementById("weight").value);
-
-        const height =
-            parseFloat(document.getElementById("height").value);
-
-        const age =
-            parseInt(document.getElementById("age").value);
-
-        const sex =
-            document.getElementById("sex").value;
-
-        const activity =
-            document.getElementById("activity").value;
-
         return {
-            weight,
-            height,
-            age,
-            sex,
-            activity
+            weight: parseFloat(
+                document.getElementById("weight").value
+            ),
+
+            height: parseFloat(
+                document.getElementById("height").value
+            ),
+
+            age: parseInt(
+                document.getElementById("age").value
+            ),
+
+            sex:
+                document.getElementById("sex").value,
+
+            activity:
+                document.getElementById("activity").value
         };
+    }
+
+
+    // ==============================
+    // Show Error
+    // ==============================
+
+    function showError(message) {
+
+        const error =
+            document.getElementById("errorMessage");
+
+        error.textContent = message;
+        error.style.display = "block";
+    }
+
+
+    // ==============================
+    // Hide Error
+    // ==============================
+
+    function hideError() {
+
+        document.getElementById("errorMessage")
+            .style.display = "none";
     }
 
 
@@ -502,26 +508,31 @@
     // Validate Information
     // ==============================
 
-    function validateInformation() {
+    function validateInformation(requireActivity = false) {
+
+        hideError();
 
         const info = getInformation();
 
-        const error =
-            document.getElementById("errorMessage");
-
-        error.style.display = "none";
-
         if (
-            !info.weight ||
-            !info.height ||
-            !info.age ||
-            !info.sex
+            isNaN(info.weight) ||
+            isNaN(info.height) ||
+            isNaN(info.age) ||
+            info.sex === ""
         ) {
 
-            error.textContent =
-                "Please enter your weight, height, age and sex first.";
+            showError(
+                "Please enter your weight, height, age and sex first."
+            );
 
-            error.style.display = "block";
+            return false;
+        }
+
+        if (requireActivity && info.activity === "") {
+
+            showError(
+                "Please select your activity level."
+            );
 
             return false;
         }
@@ -536,7 +547,7 @@
 
     function saveInformation() {
 
-        if (!validateInformation()) {
+        if (!validateInformation(true)) {
             return;
         }
 
@@ -552,7 +563,7 @@
 
 
     // ==============================
-    // Display BMI
+    // Calculate BMI Button
     // ==============================
 
     function calculateBMIButton() {
@@ -564,7 +575,19 @@
         const info = getInformation();
 
         const bmi =
-            calculateBMI(info.weight, info.height);
+            calculateBMI(
+                info.weight,
+                info.height
+            );
+
+        document.getElementById("resultWeight").textContent =
+            info.weight + " kg";
+
+        document.getElementById("resultHeight").textContent =
+            info.height + " cm";
+
+        document.getElementById("resultAge").textContent =
+            info.age;
 
         document.getElementById("resultBMI").textContent =
             bmi.toFixed(1);
@@ -583,24 +606,11 @@
 
     function calculateCalories() {
 
-        if (!validateInformation()) {
+        if (!validateInformation(true)) {
             return;
         }
 
         const info = getInformation();
-
-        if (!info.activity) {
-
-            const error =
-                document.getElementById("errorMessage");
-
-            error.textContent =
-                "Please select your activity level.";
-
-            error.style.display = "block";
-
-            return;
-        }
 
         const calories =
             calculateCaloriesValue(
@@ -611,6 +621,9 @@
             );
 
         if (calories === null) {
+            showError(
+                "Please select an activity level."
+            );
             return;
         }
 
@@ -623,33 +636,26 @@
 
 
     // ==============================
-    // Show All Information
+    // SHOW ALL INFORMATION
     // ==============================
 
     function showAllInformation() {
 
-        if (!validateInformation()) {
+        // Make sure all required information exists
+        if (!validateInformation(true)) {
             return;
         }
 
         const info = getInformation();
 
-        if (!info.activity) {
-
-            const error =
-                document.getElementById("errorMessage");
-
-            error.textContent =
-                "Please select your activity level.";
-
-            error.style.display = "block";
-
-            return;
-        }
-
+        // Calculate BMI
         const bmi =
-            calculateBMI(info.weight, info.height);
+            calculateBMI(
+                info.weight,
+                info.height
+            );
 
+        // Calculate calories
         const calories =
             calculateCaloriesValue(
                 info.weight,
@@ -658,7 +664,16 @@
                 info.sex
             );
 
-        // Personal information
+        if (calories === null) {
+            showError(
+                "Please select an activity level."
+            );
+            return;
+        }
+
+        // ==============================
+        // Personal Information
+        // ==============================
 
         document.getElementById("resultWeight").textContent =
             info.weight + " kg";
@@ -669,7 +684,10 @@
         document.getElementById("resultAge").textContent =
             info.age;
 
+
+        // ==============================
         // BMI
+        // ==============================
 
         document.getElementById("resultBMI").textContent =
             bmi.toFixed(1);
@@ -677,36 +695,50 @@
         document.getElementById("resultCategory").textContent =
             "Category: " + bmiCategory(bmi);
 
-        // Calories
+
+        // ==============================
+        // Calorie Recommendations
+        // ==============================
 
         document.getElementById("loss05").textContent =
             Math.round(calories * 0.81);
 
         document.getElementById("loss025").textContent =
-            Math.round(calories * 0.9);
+            Math.round(calories * 0.90);
 
         document.getElementById("maintenance").textContent =
             Math.round(calories);
 
         document.getElementById("gain025").textContent =
-            Math.round(calories * 1.1);
+            Math.round(calories * 1.10);
 
         document.getElementById("gain05").textContent =
             Math.round(calories * 1.19);
 
-        // Show results
+
+        // ==============================
+        // Show Results
+        // ==============================
 
         document.getElementById("results").style.display =
             "block";
+
+        // Scroll down to the results
+        document.getElementById("results")
+            .scrollIntoView({
+                behavior: "smooth"
+            });
     }
 
 
-    // Connect the BMI button to its function
+    // ==============================
+    // BMI Button
+    // ==============================
+
     function calculateBMI() {
         calculateBMIButton();
     }
 
 </script>
-
 </body>
 </html>
