@@ -88,60 +88,66 @@
             font-size: 14px;
         }
 
-        button {
+        /* ==========================
+           MAIN BUTTON
+        ========================== */
+
+        .calculate-button {
             width: 100%;
-            padding: 14px;
-            margin-top: 12px;
+            padding: 16px;
+            margin-top: 20px;
             border: none;
             border-radius: 10px;
             background: #4f46e5;
             color: white;
-            font-size: 16px;
+            font-size: 17px;
             font-weight: bold;
             cursor: pointer;
             transition: 0.2s;
         }
 
-        button:hover {
+        .calculate-button:hover {
             background: #3730a3;
+            transform: translateY(-1px);
         }
 
-        .all-button {
-            background: #10b981;
-        }
-
-        .all-button:hover {
-            background: #059669;
-        }
+        /* ==========================
+           RESET BUTTON
+        ========================== */
 
         .reset-button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 10px;
             background: #ef4444;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
         }
 
         .reset-button:hover {
             background: #dc2626;
         }
 
-        .message {
+        /* ==========================
+           ERROR
+        ========================== */
+
+        .error {
             display: none;
             margin-top: 15px;
             padding: 12px;
+            background: #fee2e2;
+            color: #991b1b;
             border-radius: 8px;
         }
 
-        .error {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .success {
-            background: #dcfce7;
-            color: #166534;
-        }
-
-        /* =================================
+        /* ==========================
            RESULTS
-        ================================= */
+        ========================== */
 
         #results {
             display: none;
@@ -214,7 +220,8 @@
     <h1>🔥 Calorie Tracker</h1>
 
     <p class="subtitle">
-        Calculate your BMI and estimated daily calorie requirements.
+        Enter your information below to calculate your BMI
+        and estimated daily calorie requirements.
     </p>
 
 
@@ -305,7 +312,7 @@
 
 
     <!-- ==========================================
-         ACTIVITY
+         ACTIVITY LEVEL
     =========================================== -->
 
     <h2>Activity Level</h2>
@@ -353,31 +360,30 @@
 
 
     <!-- ==========================================
-         BUTTONS
+         ERROR MESSAGE
     =========================================== -->
 
-    <button onclick="saveInformation()">
-        Save Information
-    </button>
+    <div
+        id="errorMessage"
+        class="error"
+    ></div>
 
 
-    <button onclick="calculateBMI()">
-        Calculate BMI
-    </button>
-
-
-    <button onclick="calculateCalories()">
-        Calculate Recommended Calories
-    </button>
-
+    <!-- ==========================================
+         MAIN BUTTON
+    =========================================== -->
 
     <button
-        class="all-button"
+        class="calculate-button"
         onclick="showAllInformation()"
     >
         Show All Information
     </button>
 
+
+    <!-- ==========================================
+         RESET
+    =========================================== -->
 
     <button
         class="reset-button"
@@ -385,24 +391,6 @@
     >
         Reset
     </button>
-
-
-    <!-- ==========================================
-         MESSAGES
-    =========================================== -->
-
-    <div
-        id="errorMessage"
-        class="message error"
-    ></div>
-
-
-    <div
-        id="successMessage"
-        class="message success"
-    >
-        Information saved successfully!
-    </div>
 
 
     <!-- ==========================================
@@ -416,7 +404,7 @@
         </h2>
 
 
-        <!-- BASIC INFORMATION -->
+        <!-- Weight -->
 
         <div class="result-card">
 
@@ -434,6 +422,8 @@
         </div>
 
 
+        <!-- Height -->
+
         <div class="result-card">
 
             <h3>
@@ -449,6 +439,8 @@
 
         </div>
 
+
+        <!-- Age -->
 
         <div class="result-card">
 
@@ -491,12 +483,13 @@
         </div>
 
 
-        <!-- CALORIES -->
+        <!-- Weight Loss -->
 
         <div class="result-card calorie-card">
 
             <h3>
-                Weight Loss (-0.5 kg/week)
+                Recommended Calories for Weight Loss
+                (-0.5 kg/week)
             </h3>
 
             <div
@@ -511,10 +504,13 @@
         </div>
 
 
+        <!-- Mild Weight Loss -->
+
         <div class="result-card calorie-card">
 
             <h3>
-                Mild Weight Loss (-0.25 kg/week)
+                Recommended Calories for Mild Weight Loss
+                (-0.25 kg/week)
             </h3>
 
             <div
@@ -529,10 +525,12 @@
         </div>
 
 
+        <!-- Maintenance -->
+
         <div class="result-card calorie-card">
 
             <h3>
-                Maintaining Weight
+                Recommended Calories for Maintaining Weight
             </h3>
 
             <div
@@ -547,10 +545,13 @@
         </div>
 
 
+        <!-- Mild Weight Gain -->
+
         <div class="result-card calorie-card">
 
             <h3>
-                Mild Weight Gain (+0.25 kg/week)
+                Recommended Calories for Mild Weight Gain
+                (+0.25 kg/week)
             </h3>
 
             <div
@@ -565,10 +566,13 @@
         </div>
 
 
+        <!-- Weight Gain -->
+
         <div class="result-card calorie-card">
 
             <h3>
-                Weight Gain (+0.5 kg/week)
+                Recommended Calories for Weight Gain
+                (+0.5 kg/week)
             </h3>
 
             <div
@@ -619,40 +623,20 @@
 
             activity:
                 document.getElementById("activity").value
+
         };
+
     }
 
 
     /* ==========================================
-       ERROR HANDLING
+       VALIDATION
     ========================================== */
 
-    function showError(message) {
-
-        const error =
-            document.getElementById("errorMessage");
-
-        error.textContent = message;
-
-        error.style.display = "block";
-    }
-
-
-    function hideError() {
-
-        document.getElementById(
-            "errorMessage"
-        ).style.display = "none";
-    }
-
-
-    /* ==========================================
-       VALIDATE BASIC INFORMATION
-    ========================================== */
-
-    function validateBasicInformation() {
+    function validateInputs() {
 
         const data = getInputs();
+
 
         if (
             isNaN(data.weight) ||
@@ -666,25 +650,9 @@
             );
 
             return false;
+
         }
 
-        hideError();
-
-        return true;
-    }
-
-
-    /* ==========================================
-       VALIDATE EVERYTHING
-    ========================================== */
-
-    function validateEverything() {
-
-        if (!validateBasicInformation()) {
-            return false;
-        }
-
-        const data = getInputs();
 
         if (data.activity === "") {
 
@@ -693,11 +661,39 @@
             );
 
             return false;
+
         }
+
 
         hideError();
 
         return true;
+
+    }
+
+
+    /* ==========================================
+       ERROR MESSAGE
+    ========================================== */
+
+    function showError(message) {
+
+        const error =
+            document.getElementById("errorMessage");
+
+        error.textContent = message;
+
+        error.style.display = "block";
+
+    }
+
+
+    function hideError() {
+
+        document.getElementById(
+            "errorMessage"
+        ).style.display = "none";
+
     }
 
 
@@ -705,7 +701,7 @@
        BMI
     ========================================== */
 
-    function getBMI(weight, height) {
+    function calculateBMI(weight, height) {
 
         const heightMetres =
             height / 100;
@@ -714,6 +710,7 @@
             weight /
             (heightMetres * heightMetres)
         );
+
     }
 
 
@@ -727,19 +724,22 @@
 
             return "Underweight";
 
-        } else if (bmi < 25) {
+        }
+
+        if (bmi < 25) {
 
             return "Normal weight";
 
-        } else if (bmi < 30) {
+        }
+
+        if (bmi < 30) {
 
             return "Overweight";
 
-        } else {
-
-            return "Obese";
-
         }
+
+        return "Obese";
+
     }
 
 
@@ -747,7 +747,7 @@
        ACTIVITY MULTIPLIER
     ========================================== */
 
-    function getMultiplier(activity) {
+    function getActivityMultiplier(activity) {
 
         switch (activity) {
 
@@ -768,15 +768,17 @@
 
             default:
                 return null;
+
         }
+
     }
 
 
     /* ==========================================
-       CALORIES
+       CALCULATE CALORIES
     ========================================== */
 
-    function getCalories(
+    function calculateCalories(
         weight,
         height,
         age,
@@ -787,6 +789,8 @@
         let bmr;
 
 
+        /* Mifflin-St Jeor */
+
         if (sex === "M") {
 
             bmr =
@@ -795,7 +799,9 @@
                 (5 * age) +
                 5;
 
-        } else {
+        }
+
+        else {
 
             bmr =
                 (10 * weight) +
@@ -807,171 +813,26 @@
 
 
         const multiplier =
-            getMultiplier(activity);
+            getActivityMultiplier(activity);
 
 
         return bmr * multiplier;
-    }
-
-
-    /* ==========================================
-       MAKE RESULTS VISIBLE
-    ========================================== */
-
-    function showResults() {
-
-        const results =
-            document.getElementById("results");
-
-        results.style.display = "block";
-
-        results.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-        });
-    }
-
-
-    /* ==========================================
-       CALCULATE BMI BUTTON
-    ========================================== */
-
-    function calculateBMI() {
-
-        if (!validateBasicInformation()) {
-            return;
-        }
-
-        const data = getInputs();
-
-
-        const bmi =
-            getBMI(
-                data.weight,
-                data.height
-            );
-
-
-        /*
-         * Display BMI information
-         */
-
-        document.getElementById(
-            "resultWeight"
-        ).textContent =
-            data.weight + " kg";
-
-
-        document.getElementById(
-            "resultHeight"
-        ).textContent =
-            data.height + " cm";
-
-
-        document.getElementById(
-            "resultAge"
-        ).textContent =
-            data.age;
-
-
-        document.getElementById(
-            "resultBMI"
-        ).textContent =
-            bmi.toFixed(1);
-
-
-        document.getElementById(
-            "resultCategory"
-        ).textContent =
-            "Category: " +
-            getBMICategory(bmi);
-
-
-        /*
-         * Make results visible
-         */
-
-        showResults();
 
     }
 
 
     /* ==========================================
-       CALCULATE CALORIES BUTTON
-    ========================================== */
-
-    function calculateCalories() {
-
-        if (!validateEverything()) {
-            return;
-        }
-
-        const data = getInputs();
-
-
-        const calories =
-            getCalories(
-                data.weight,
-                data.height,
-                data.age,
-                data.sex,
-                data.activity
-            );
-
-
-        /*
-         * Display basic information
-         */
-
-        document.getElementById(
-            "resultWeight"
-        ).textContent =
-            data.weight + " kg";
-
-
-        document.getElementById(
-            "resultHeight"
-        ).textContent =
-            data.height + " cm";
-
-
-        document.getElementById(
-            "resultAge"
-        ).textContent =
-            data.age;
-
-
-        /*
-         * Display maintenance calories
-         */
-
-        document.getElementById(
-            "maintenance"
-        ).textContent =
-            Math.round(calories);
-
-
-        /*
-         * Make results visible
-         */
-
-        showResults();
-
-    }
-
-
-    /* ==========================================
-       SHOW ALL INFORMATION BUTTON
+       SHOW ALL INFORMATION
     ========================================== */
 
     function showAllInformation() {
 
         /*
-         * This button requires EVERY
-         * piece of information.
+         * Check that the user has
+         * entered everything.
          */
 
-        if (!validateEverything()) {
+        if (!validateInputs()) {
             return;
         }
 
@@ -979,23 +840,23 @@
         const data = getInputs();
 
 
-        /* --------------------------------------
-           BMI
-        -------------------------------------- */
+        /*
+         * Calculate BMI
+         */
 
         const bmi =
-            getBMI(
+            calculateBMI(
                 data.weight,
                 data.height
             );
 
 
-        /* --------------------------------------
-           CALORIES
-        -------------------------------------- */
+        /*
+         * Calculate daily calories
+         */
 
         const calories =
-            getCalories(
+            calculateCalories(
                 data.weight,
                 data.height,
                 data.age,
@@ -1004,9 +865,9 @@
             );
 
 
-        /* --------------------------------------
+        /* ======================================
            PERSONAL INFORMATION
-        -------------------------------------- */
+        ====================================== */
 
         document.getElementById(
             "resultWeight"
@@ -1026,9 +887,9 @@
             data.age;
 
 
-        /* --------------------------------------
+        /* ======================================
            BMI
-        -------------------------------------- */
+        ====================================== */
 
         document.getElementById(
             "resultBMI"
@@ -1043,74 +904,72 @@
             getBMICategory(bmi);
 
 
-        /* --------------------------------------
+        /* ======================================
            CALORIE RECOMMENDATIONS
-        -------------------------------------- */
+        ====================================== */
 
         document.getElementById(
             "loss05"
         ).textContent =
-            Math.round(calories * 0.81);
+            Math.round(
+                calories * 0.81
+            );
 
 
         document.getElementById(
             "loss025"
         ).textContent =
-            Math.round(calories * 0.90);
+            Math.round(
+                calories * 0.90
+            );
 
 
         document.getElementById(
             "maintenance"
         ).textContent =
-            Math.round(calories);
+            Math.round(
+                calories
+            );
 
 
         document.getElementById(
             "gain025"
         ).textContent =
-            Math.round(calories * 1.10);
+            Math.round(
+                calories * 1.10
+            );
 
 
         document.getElementById(
             "gain05"
         ).textContent =
-            Math.round(calories * 1.19);
-
-
-        /*
-         * FINALLY SHOW EVERYTHING
-         */
-
-        showResults();
-
-    }
-
-
-    /* ==========================================
-       SAVE INFORMATION
-    ========================================== */
-
-    function saveInformation() {
-
-        if (!validateEverything()) {
-            return;
-        }
-
-
-        const success =
-            document.getElementById(
-                "successMessage"
+            Math.round(
+                calories * 1.19
             );
 
 
-        success.style.display = "block";
+        /* ======================================
+           DISPLAY RESULTS
+        ====================================== */
+
+        const results =
+            document.getElementById(
+                "results"
+            );
 
 
-        setTimeout(function() {
+        results.style.display =
+            "block";
 
-            success.style.display = "none";
 
-        }, 3000);
+        /*
+         * Scroll down to the results
+         */
+
+        results.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
 
     }
 
@@ -1152,11 +1011,6 @@
 
 
         hideError();
-
-
-        document.getElementById(
-            "successMessage"
-        ).style.display = "none";
 
     }
 
